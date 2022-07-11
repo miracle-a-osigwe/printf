@@ -51,8 +51,7 @@ int _switch_check(*format, *nlist)
 			switch (xx)
 			{
 			case 'c':
-				int c = va_arg(nlist, int);
-				charHandler(c);
+				int c = charHandler(va_arg(nlist, int));
 				break;
 			case 's':
 				char * str = va_arg(npist, char *);
