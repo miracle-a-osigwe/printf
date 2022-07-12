@@ -6,13 +6,20 @@
  *@str: input to the function
  */
 
-void strHandler(char * str)
+int strHandler(char * str)
 {
 	int x = 0;
+	char *string;
 
-	while (str[x] != '\0')
+	string = malloc(sizeof(str) * strlen(str));
+
+	strcpy(string, str);
+
+	while (string[x] != '\0')
 	{
-		_putchar(str[x]);
+		_putchar(string[x]);
 		x++;
 	}
+	free(string);
+	return (x);
 }

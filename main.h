@@ -1,16 +1,19 @@
 #ifndef _MAIN_H_
 #define _MAIN_H_
+#include <stdio.h>
 #include <stdlib.h>
-#include <stdarg>
+#include <stdarg.h>
 #include <stddef.h>
 #include <string.h>
+#include <unistd.h>
 
 
 int _putchar(char c);
 int _printf(const char *format, ...);
-int _switch_check(int *format, va_list *nlist);
-void strHandler(char * str);
+int _switch_check(const char *format, va_list nlist);
+int strHandler(char * str);
 int characterHandler(char c);
+int digitHandler(int value);
 
 
 char *_strcat(char *dest, char *src);
