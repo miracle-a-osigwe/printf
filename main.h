@@ -10,6 +10,7 @@ int _putchar(char c);
 int _printf(const char *format, ...);
 int _switch_check(int *format, va_list *nlist);
 void strHandler(char * str);
+int characterHandler(char c);
 
 
 char *_strcat(char *dest, char *src);
