@@ -5,57 +5,83 @@
  *_printf - Function call
  *Description: A replica of the standard printf function
  *@format: format to use for the function
- *
+ *return: Returns the length of the format
  */
 
 int _printf(const char *format, ...)
 {
 	va_list nlist;
-	int d, c, i;
+	/*int d, c, i;
 	char * s;
 	float f;
 	double lf;
-	unsigned int u;
-	int x = 0, y = 0;;
+	unsigned int u;*/
+	int x = 0;
+	int y = 0;
+	char *str;
 
-	while (format[x] != '\0')
+	str = malloc(sizeof(format) * strlen(format));
+
+	strcpy(str, format);
+
+	va_start(nlist, format);
+
+	while (str[x] != '\0')
 	{
-		_switch_check(format, nlist);
+		if (str[x] == '%')
+		{
+			y = _switch_check(str, nlist);
+			x++;
+
+			if (y != 0)
+			{
+				x++;
+			}
+			else
+			{
+				x--;
+			}
+		}
+		_putchar(str[x]);
 		x++;
 	}
-	retuen (0);
+	return (x);
 }
 
 
 /**
  *_switch_check - Function call
  *Description: Decision making function to print
- *@format: Format of what is to be printed
+ *@str: Format in the string that points to what is to be printed
  *@nlist: list of type va_list
  */
 
-int _switch_check(*format, *nlist)
+int _switch_check(const char *str, va_list nlist)
 {
 	int x = 0;
 
-	va_start(nlist, format);
-
-	while (format[x] != '\0')
+	while (str[x] != '\0')
 	{
-		char y = format[x];
+		char y = str[x];
 
 		if (y == '%')
 		{
-			char xx = format[x + 1];
+			char xx = str[x + 1];
 
 			switch (xx)
 			{
 			case 'c':
-				int c = charHandler(va_arg(nlist, int));
+				characterHandler(va_arg(nlist, int));
+				x++;
 				break;
 			case 's':
-				char * str = va_arg(npist, char *);
-				strHandler(str);
+				strHandler(va_arg(nlist, char *));
+				x++;
+				/*strHandler(str);*/
+				break;
+			case 'd':
+				digitHandler(va_arg(nlist, int));
+				x++;
 				break;
 			default:
 				break;
@@ -64,5 +90,6 @@ int _switch_check(*format, *nlist)
 		}
 		x++;
 	}
-	return (0);
+	va_end(nlist);
+	return (x);
 }
