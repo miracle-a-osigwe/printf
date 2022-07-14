@@ -7,7 +7,6 @@
  * if a flag is passed to _printf
  * Return: number of char printed
  */
-
 int print_int(va_list l, flags_t *f)
 {
 	int n = va_arg(l, int);
