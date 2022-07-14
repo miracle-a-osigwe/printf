@@ -1,95 +1,48 @@
 #include "main.h"
 
-
 /**
- *_printf - Function call
- *Description: A replica of the standard printf function
- *@format: format to use for the function
- *return: Returns the length of the format
+ * _printf - produces output according to a format
+ * @format: format string containing the characters and the specifiers
+ * Description: this function will call the get_print() function that will
+ * determine which printing function to call depending on the conversion
+ * specifiers contained into fmt
+ * Return: length of the formatted output string
  */
 
 int _printf(const char *format, ...)
 {
-	va_list nlist;
-	/*int d, c, i;
-	char * s;
-	float f;
-	double lf;
-	unsigned int u;*/
-	int x = 0;
-	int y = 0;
-	char *str;
+	int (*pfunc)(va_list, flags_t *);
+	const char *p;
+	va_list arguments;
+	flags_t flags = {0, 0, 0};
 
-	str = malloc(sizeof(format) * strlen(format));
+	register int count = 0;
 
-	strcpy(str, format);
-
-	va_start(nlist, format);
-
-	while (str[x] != '\0')
+	va_start(arguments, format);
+	if (!format || (format[0] == '%' && !format[1]))
+		return (-1);
+	if (format[0] == '%' && format[1] == ' ' && !format[2])
+		return (-1);
+	for (p = format; *p; p++)
 	{
-		if (str[x] == '%')
+		if (*p == '%')
 		{
-			y = _switch_check(str, nlist);
-			x++;
-
-			if (y != 0)
+			p++;
+			if (*p == '%')
 			{
-				x++;
+				count += _putchar('%');
+				continue;
 			}
-			else
-			{
-				x--;
-			}
-		}
-		_putchar(str[x]);
-		x++;
+			while (get_flag(*p, &flags))
+				p++;
+			pfunc = get_print(*p);
+			count += (pfunc)
+				? pfunc(arguments, &flags)
+				: _printf("%%%c", *p);
+		} else
+			count += _putchar(*p);
 	}
-	return (x);
-}
-
-
-/**
- *_switch_check - Function call
- *Description: Decision making function to print
- *@str: Format in the string that points to what is to be printed
- *@nlist: list of type va_list
- */
-
-int _switch_check(const char *str, va_list nlist)
-{
-	int x = 0;
-
-	while (str[x] != '\0')
-	{
-		char y = str[x];
-
-		if (y == '%')
-		{
-			char xx = str[x + 1];
-
-			switch (xx)
-			{
-			case 'c':
-				characterHandler(va_arg(nlist, int));
-				x++;
-				break;
-			case 's':
-				strHandler(va_arg(nlist, char *));
-				x++;
-				/*strHandler(str);*/
-				break;
-			case 'd':
-				digitHandler(va_arg(nlist, int));
-				x++;
-				break;
-			default:
-				break;
-
-			}
-		}
-		x++;
-	}
-	va_end(nlist);
-	return (x);
+	_putchar(-1);
+	va_end(arguments);
+	return (count);
 }
